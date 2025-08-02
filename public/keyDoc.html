@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentação - Sistema de Chaves</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      line-height: 1.6;
+      padding: 2rem;
+     overflow-x:hidden;
+    }
+
+    h1, h2, h3 {
+      color: #00ffae;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    code {
+      background: #1e1e1e;
+      color: #a8ff60;
+      padding: 0.3rem 0.5rem;
+      border-radius: 5px;
+      display: inline-block;
+      margin: 0.3rem 0;
+      word-break: break-all;
+    }
+
+    pre {
+      background: #1e1e1e;
+      padding: 1rem;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+
+    a {
+      color: #00c2ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .icon {
+      margin-right: 8px;
+      color: #00ffae;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #333;
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-left: 6px;
+    }
+
+    .highlight {
+      background: #1e1e1e;
+      padding: 0.5rem;
+      border-left: 4px solid #00ffae;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><i class="fas fa-key icon"></i>Documentação - Sistema de Chaves de Acesso</h1>
+
+    <div class="highlight">
+      <strong>Nota:</strong> Essa API foi pensada especialmente para desenvolvedores que usam a engine <strong>Pocket Code</strong>, facilitando a integração de verificação de chaves em seus projetos.
+    </div>
+
+    <p>Essa ferramenta foi feita pra você que quer liberar <strong>qualquer conteúdo online</strong> só pra quem tiver uma <strong>chave de acesso</strong> válida.</p>
+
+    <h2><i class="fas fa-lock-open icon"></i>1. Criando uma chave</h2>
+    <p>Acesse o painel em:</p>
+    <code>https://cm-store.vercel.app/keys.html</code>
+
+    <p>Clique em <strong>"Gerar nova chave"</strong>. Você receberá:</p>
+    <ul>
+      <li><strong>ID</strong> (ex: <code>abc123</code>)</li>
+      <li><strong>Chave</strong> (ex: <code>XPTO999</code>)</li>
+    </ul>
+
+    <h2><i class="fas fa-code icon"></i>2. Verificando a chave</h2>
+    <p>Use esse endpoint para verificar se a chave está válida e ainda não foi usada:</p>
+    <code>https://caiolibs.vercel.app/api/keyChecked.js?id=SEU_ID&chave=SUA_CHAVE</code>
+
+    <h3>Exemplo:</h3>
+    <code>https://caiolibs.vercel.app/api/keyChecked.js?id=abc123&chave=XPTO999</code>
+
+    <h2><i class="fas fa-terminal icon"></i>3. Código JavaScript de exemplo</h2>
+    <pre><code>fetch("https://caiolibs.vercel.app/api/keyChecked.js?id=abc123&chave=XPTO999")
+  .then(res => res.text())
+  .then(resposta => {
+    if (resposta === "true") {
+      alert("Acesso liberado!");
+    } else {
+      alert("Chave inválida ou já usada!");
+    }
+  });</code></pre>
+
+    <h2><i class="fas fa-exclamation-triangle icon"></i>Regras</h2>
+    <ul>
+      <li>Chave válida = <code>true</code></li>
+      <li>Chave inválida ou já usada = <code>false</code></li>
+      <li>Cada chave só pode ser usada <strong>uma vez</strong></li>
+    </ul>
+
+    <h2><i class="fas fa-lightbulb icon"></i>Possíveis usos</h2>
+    <ul>
+      <li>Downloads exclusivos</li>
+      <li>Links secretos</li>
+      <li>Conteúdo premium</li>
+      <li>Ativar recursos em jogos ou apps</li>
+    </ul>
+ <h2>Vídeo (usando no pocket code)<h2>
+<br>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/xdFZAOT306w" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+    <footer>
+      Criado por <strong>Caio Multiversando</strong> - Sistema de validação de chaves by <span class="badge">CaioLibs</span>
+    </footer>
+  </div>
+</body>
+</html>

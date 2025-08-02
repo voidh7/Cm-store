@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "9441361d-4d22-4034-831d-1e2a00ab8dc0",
+    });
+  });
+</script>
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CM STORE - Comunidade!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .post-form {
+            margin-bottom: 30px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .posts {
+            margin-top: 20px;
+        }
+        .post {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .post-content {
+            margin-bottom: 10px;
+        }
+        .post-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+        .success {
+            color: green;
+            margin-top: 10px;
+        }
+        .profile-section {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Comunidade CM STORE</h1>
+
+        <div class="profile-section">
+            <img id="profilePic" class="profile-pic" src="" alt="Foto de perfil">
+            <div>
+                <input type="file" id="profilePicInput" accept="image/*">
+                <button onclick="saveProfilePic()">Salvar Foto</button>
+            </div>
+        </div>
+
+        <div class="post-form">
+            <h2>Criar Publicação</h2>
+            <textarea id="postText" placeholder="O que você quer compartilhar? (mínimo 100 caracteres)"></textarea>
+            <input type="file" id="postImage" accept="image/*">
+            <button onclick="createPost()">Publicar</button>
+            <div id="message" class="error"></div>
+        </div>
+
+        <div class="posts" id="postsContainer">
+            <h2>Publicações Recentes</h2>
+            
+        </div>
+    </div>
+
+    <script>
+       
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProfilePic();
+            loadPosts();
+        });
+
+        
+        function loadProfilePic() {
+            const savedPic = localStorage.getItem('profilePic');
+            if (savedPic) {
+                document.getElementById('profilePic').src = savedPic;
+            } else {
+                document.getElementById('profilePic').src = 'https://via.placeholder.com/50';
+            }
+        }
+
+        function saveProfilePic() {
+            const fileInput = document.getElementById('profilePicInput');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Image = e.target.result;
+                    localStorage.setItem('profilePic', base64Image);
+                    document.getElementById('profilePic').src = base64Image;
+                    alert('Foto de perfil salva com sucesso!');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('Por favor, selecione uma imagem primeiro.');
+            }
+        }
+
+ 
+        function createPost() {
+            const postText = document.getElementById('postText').value;
+            const messageDiv = document.getElementById('message');
+
+            if (postText.length < 100) {
+                messageDiv.textContent = "A publicação precisa ter pelo menos 100 caracteres.";
+                messageDiv.className = "error";
+                return;
+            }
+
+            const fileInput = document.getElementById('postImage');
+            const file = fileInput.files[0];
+            const profilePic = localStorage.getItem('profilePic') || '';
+
+            const postData = {
+                texto: postText,
+                imagemPerfil: profilePic
+            };
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    postData.imagem = e.target.result;
+                    sendPost(postData);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                sendPost(postData);
+            }
+        }
+
+        function sendPost(postData) {
+            fetch('https://caiolibs.vercel.app/api/postComunit.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const messageDiv = document.getElementById('message');
+                if (data.logar) {
+                    messageDiv.textContent = "Publicação enviada com sucesso!";
+                    messageDiv.className = "success";
+                    document.getElementById('postText').value = '';
+                    document.getElementById('postImage').value = '';
+                    loadPosts(); // Recarrega as publicações
+                } else {
+                    messageDiv.textContent = "Erro: " + (data.erro || "Falha ao publicar");
+                    messageDiv.className = "error";
+                }
+            })
+            .catch(error => {
+                document.getElementById('message').textContent = "Erro ao enviar publicação: " + error.message;
+                document.getElementById('message').className = "error";
+            });
+        }
+
+       
+        function loadPosts() {
+            fetch('https://caiolibs.vercel.app/api/postComunit.js')
+            .then(response => response.json())
+            .then(data => {
+                const postsContainer = document.getElementById('postsContainer');
+                // Limpa as publicações antigas (exceto o título)
+                while (postsContainer.children.length > 1) {
+                    postsContainer.removeChild(postsContainer.lastChild);
+                }
+
+                // Adiciona as novas publicações
+                if (data && typeof data === 'object') {
+                    Object.values(data).reverse().forEach(post => {
+                        const postElement = document.createElement('div');
+                        postElement.className = 'post';
+
+                        let postHTML = `
+                            <div class="post-header">
+                                ${post.imagemPerfil ? `<img src="${post.imagemPerfil}" class="profile-pic">` : ''}
+                            </div>
+                            <div class="post-content">${post.texto || ''}</div>
+                        `;
+
+                        if (post.imagem) {
+                            postHTML += `<img src="${post.imagem}" class="post-image">`;
+                        }
+
+                        postElement.innerHTML = postHTML;
+                        postsContainer.appendChild(postElement);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Erro ao carregar publicações:", error);
+            });
+        }
+    </script>
+</body>
+</html>

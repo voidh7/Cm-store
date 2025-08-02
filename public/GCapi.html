@@ -1,0 +1,110 @@
+<!DOCTYPE html><html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Save GC - Documentação</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+    body {
+      background-color: #121212;
+      color: #f5f5f5;
+      padding: 2rem;
+      line-height: 1.7;
+    }
+    h1, h2, h3 {
+      color: #FFD700;
+    }
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      font-size: 1.6rem;
+      margin-top: 2rem;
+    }
+    h3 {
+      font-size: 1.3rem;
+      margin-top: 1.5rem;
+    }
+    p, li {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+    code {
+      background-color: #1e1e1e;
+      padding: 0.3rem 0.5rem;
+      border-radius: 5px;
+      color: #FFD700;
+    }
+    .icon {
+      margin-right: 0.5rem;
+      color: #FFD700;
+    }
+    .box {
+      border: 1px solid #FFD70033;
+      padding: 1rem;
+      border-radius: 10px;
+      background-color: #1c1c1c;
+      margin-top: 1rem;
+    }
+    a {
+      color: #FFD700;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .url-example {
+      background-color: #222;
+      padding: 0.7rem;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+      font-family: monospace;
+    }
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <h1 class="fade-in"><i data-feather="database" class="icon"></i>Save GC - Documentação</h1>  <p class="fade-in">Save GC é uma API hospedada na CM Store (uma loja de jogos feita por Caio Multiversando). Ela pertence à GC Editora, criadora do Pocket Race, e foi criada para substituir o bloco de salvar em arquivo no Pocket Code.</p>  <div class="box fade-in">
+    <h2><i data-feather="play-circle" class="icon"></i>Como usar?</h2>
+    <p>Para salvar dados, informe:</p>
+    <ul>
+      <li>O <strong>nome do jogo</strong></li>
+      <li>O <strong>nome do arquivo</strong></li>
+      <li>Um <strong>ID para o jogador</strong></li>
+    </ul>
+  </div>  <h2><i data-feather="help-circle" class="icon"></i>Por que cada informação é necessária?</h2>
+  <div class="box">
+    <h3>Nome do Jogo</h3>
+    <p>Para a API saber para onde enviar os dados no armazém.</p><h3>Nome do Arquivo</h3>
+<p>Porque há muitos arquivos diferentes. Precisamos saber qual deve ser usado.</p>
+
+<h3>ID do Jogador</h3>
+<p>Para diferenciar jogadores e seus dados.</p>
+<p><strong>Dica:</strong> use um número aleatório entre 1 e 10.000 como ID.</p>
+
+  </div>  <h2><i data-feather="upload" class="icon"></i>Salvando arquivo</h2>
+  <div class="url-example">cm-store.vercel.app/api/arquivo.js?acao=salvar&nomeJogo=FreeFire&nomeArquivo=pontos&id=caio&valor=743</div>
+  <p>Isso envia o valor <code>743</code> para o jogo <code>FreeFire</code>, no arquivo <code>pontos</code> do jogador <code>Caio</code>.</p>  <h2><i data-feather="code" class="icon"></i>Usando no Pocket Code</h2>
+  <p>Use o bloco <strong>"enviar solicitação para web"</strong> com a URL acima.</p>
+  <p>Substitua os valores pelos do seu jogo.</p>
+  <p>Use <code>&amp;</code> para separar os parâmetros na URL.</p>  <h2><i data-feather="download" class="icon"></i>Lendo dados</h2>
+  <p>Altere <code>acao=salvar</code> para <code>acao=ler</code> e remova <code>valor=</code>.</p>
+  <div class="url-example">cm-store.vercel.app/api/arquivo.js?acao=ler&nomeJogo=FreeFire&nomeArquivo=pontos&id=caio</div>  <h2><i data-feather="link-2" class="icon"></i>Juntando variáveis na URL</h2>
+  <p>Use a função <strong>JUNTAR()</strong> no Pocket Code para combinar texto e variáveis.</p>
+  <div class="url-example">Juntar('Olá', nome)</div>  <h2><i data-feather="heart" class="icon"></i>Agradecimento</h2>
+  <p>A GC Editora e Caio Multiversando agradecem sua curiosidade e vontade de aprender. Essa documentação será atualizada conforme melhorias forem feitas.</p>  <script>feather.replace()</script></body>
+</html>
