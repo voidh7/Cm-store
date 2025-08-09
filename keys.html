@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container-principal {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .cabecalho {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .titulo-painel {
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .titulo-painel i {
+            color: #3498db;
+        }
+        
+        .usuario-info {
+            text-align: right;
+        }
+        
+        .nome-usuario {
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .info-expiracao {
+            font-size: 12px;
+            opacity: 0.8;
+            color: #bdc3c7;
+        }
+        
+        .secao {
+            padding: 20px;
+            border-bottom: 1px solid #2d2d2d;
+        }
+        
+        .secao:last-child {
+            border-bottom: none;
+        }
+        
+        .secao-titulo {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #3498db;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .secao-titulo i {
+            font-size: 22px;
+        }
+        
+        .controles {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .botao-acao {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .botao-acao:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .botao-acao:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .botao-acao:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.7;
+        }
+        
+        .lista-chaves {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .chave-item {
+            background-color: #252525;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .chave-item:hover {
+            background-color: #2a2a2a;
+            border-color: #3498db;
+        }
+        
+        .chave-texto {
+            font-family: 'Fira Code', monospace, 'Courier New', Courier;
+            word-break: break-all;
+            color: #f1c40f;
+            font-size: 14px;
+        }
+        
+        .acoes-chave {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .botao-icone {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #7f8c8d;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .botao-icone:hover {
+            color: #3498db;
+            background-color: rgba(52, 152, 219, 0.1);
+            transform: scale(1.1);
+        }
+        
+        .bloqueado-container {
+            padding: 40px 20px;
+            text-align: center;
+            display: none;
+            background-color: #1e1e1e;
+        }
+        
+        .bloqueado-titulo {
+            color: #e74c3c;
+            margin-bottom: 15px;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .bloqueado-mensagem {
+            margin-bottom: 20px;
+            color: #bdc3c7;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        
+        .botao-suporte {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .botao-suporte:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .botao-suporte:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .mensagem {
+            padding: 12px 16px;
+            margin: 10px 0;
+            border-radius: 6px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .mensagem-sucesso {
+            background-color: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+        
+        .mensagem-erro {
+            background-color: rgba(231, 76, 60, 0.15);
+            color: #e74c3c;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+        
+        .mensagem-info {
+            background-color: rgba(52, 152, 219, 0.15);
+            color: #3498db;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .carregando {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+        
+        .carregando i {
+            font-size: 32px;
+            color: #3498db;
+            animation: spin 1s linear infinite;
+            margin-bottom: 10px;
+        }
+        
+        .carregando p {
+            color: #bdc3c7;
+            margin-top: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Efeito de neomorfismo para os botões de ação */
+        .botao-neo {
+            background: #252525;
+            box-shadow: 5px 5px 10px #1a1a1a, 
+                        -5px -5px 10px #303030;
+            border: none;
+            color: #3498db;
+        }
+        
+        .botao-neo:hover {
+            box-shadow: 2px 2px 5px #1a1a1a, 
+                        -2px -2px 5px #303030;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .cabecalho {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .usuario-info {
+                text-align: center;
+            }
+            
+            .controles {
+                flex-direction: column;
+            }
+            
+            .botao-acao {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .chave-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .acoes-chave {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-principal">
+        <div class="cabecalho">
+            <h1 class="titulo-painel">
+                <i class="mdi mdi-key-chain-variant"></i> Painel de Chaves
+            </h1>
+            <div class="usuario-info">
+                <div>Olá, <span class="nome-usuario" id="nome-usuario"></span>!</div>
+                <div class="info-expiracao" id="info-expiracao"></div>
+            </div>
+        </div>
+        
+        <!-- Estado Bloqueado -->
+        <div class="bloqueado-container" id="container-bloqueado">
+            <h2 class="bloqueado-titulo">
+                <i class="mdi mdi-lock-alert"></i> Acesso Bloqueado
+            </h2>
+            <p class="bloqueado-mensagem" id="mensagem-bloqueio"></p>
+            <button class="botao-suporte" id="botao-contato-suporte">
+                <i class="mdi mdi-lifebuoy"></i> Contatar Suporte
+            </button>
+        </div>
+        
+        <!-- Conteúdo Normal -->
+        <div id="conteudo-normal">
+            <div class="mensagem" id="mensagem-global"></div>
+            
+            <div class="carregando" id="carregando">
+                <i class="mdi mdi-loading mdi-spin"></i>
+                <p>Carregando dados...</p>
+            </div>
+            
+            <div class="secao">
+                <h2 class="secao-titulo">
+                    <i class="mdi mdi-key-variant"></i> Suas Chaves Existentes
+                </h2>
+                <div class="controles">
+                    <button class="botao-acao" id="botao-atualizar-lista">
+                        <i class="mdi mdi-refresh"></i> Atualizar Lista
+                    </button>
+                </div>
+                <div class="mensagem mensagem-info" id="mensagem-lista-vazia" style="display: none;">
+                    <i class="mdi mdi-information-outline"></i> Você ainda não possui chaves cadastradas.
+                </div>
+                <div class="lista-chaves" id="lista-chaves"></div>
+            </div>
+            
+            <div class="secao">
+                <h2 class="secao-titulo">
+                    <i class="mdi mdi-key-plus"></i> Gerar Novas Chaves
+                </h2>
+                <button class="botao-acao" id="botao-gerar-chaves">
+                    <i class="mdi mdi-key-chain"></i> Gerar Nova Chave
+                </button>
+                <div class="mensagem mensagem-info" id="mensagem-geracao" style="display: none;"></div>
+                <div class="lista-chaves" id="novas-chaves-geradas"></div>
+            </div>
+        </div>
+    </div>
+<h3>Dúvidas? <a href="keyDoc.html">Leia a documentação</a></h3>
+<script>
+    const idUsuario = localStorage.getItem("id");
+    const senhaUsuario = localStorage.getItem("userPassword");
+
+if(!idUsuario || !senhaUsuario) {
+            
+     window.location.href = "keyLogin.html"
+            
+        }
+
+    let dadosUsuario = null;
+    
+    const elementos = {
+        nomeUsuario: document.getElementById('nome-usuario'),
+        infoExpiracao: document.getElementById('info-expiracao'),
+        containerBloqueado: document.getElementById('container-bloqueado'),
+        mensagemBloqueio: document.getElementById('mensagem-bloqueio'),
+        conteudoNormal: document.getElementById('conteudo-normal'),
+        listaChaves: document.getElementById('lista-chaves'),
+        novasChavesGeradas: document.getElementById('novas-chaves-geradas'),
+        botaoAtualizarLista: document.getElementById('botao-atualizar-lista'),
+        botaoGerarChaves: document.getElementById('botao-gerar-chaves'),
+        mensagemGlobal: document.getElementById('mensagem-global'),
+        mensagemListaVazia: document.getElementById('mensagem-lista-vazia'),
+        mensagemGeracao: document.getElementById('mensagem-geracao'),
+        carregando: document.getElementById('carregando'),
+        botaoContatoSuporte: document.getElementById('botao-contato-suporte')
+    };
+    
+    const API_URL = 'https://caiolibs.vercel.app/api/keyLog.js';
+    
+    async function chamarAPI(acao, dados = {}) {
+        try {
+            const url = new URL(API_URL);
+            url.searchParams.append('id', idUsuario);
+            url.searchParams.append('senha', senhaUsuario);
+            url.searchParams.append('acao', acao);
+            
+            if (acao === 'gerarChave') {
+                url.searchParams.append('nomeChave', dados.nomeChave);
+                url.searchParams.append('valorChave', dados.valorChave);
+            }
+            
+            const resposta = await fetch(url.toString());
+            
+            if (!resposta.ok) {
+                throw new Error(`Erro na API: ${resposta.status}`);
+            }
+            
+            return await resposta.json();
+        } catch (erro) {
+            console.error('Erro na chamada à API:', erro);
+            throw erro;
+        }
+    }
+    
+    function mostrarMensagem(tipo, texto, elemento = elementos.mensagemGlobal) {
+        elemento.innerHTML = `<i class="mdi ${tipo === 'sucesso' ? 'mdi-check-circle' : tipo === 'erro' ? 'mdi-alert-circle' : 'mdi-information'}"></i> ${texto}`;
+        elemento.className = `mensagem mensagem-${tipo}`;
+        elemento.style.display = 'flex';
+        
+        if (tipo !== 'info') {
+            setTimeout(() => {
+                elemento.style.display = 'none';
+            }, 5000);
+        }
+    }
+    
+    function toggleCarregando(mostrar) {
+        elementos.carregando.style.display = mostrar ? 'block' : 'none';
+    }
+    
+    async function verificarStatusUsuario() {
+        try {
+            toggleCarregando(true);
+            
+            const resposta = await chamarAPI('verificarStatus');
+            
+            if (resposta.lock === true) {
+                elementos.containerBloqueado.style.display = 'block';
+                elementos.conteudoNormal.style.display = 'none';
+                elementos.mensagemBloqueio.textContent = 'Sua conta foi bloqueada pelo administrador. Entre em contato com o suporte para mais informações.';
+            } else {
+                elementos.containerBloqueado.style.display = 'none';
+                elementos.conteudoNormal.style.display = 'block';
+                await carregarDadosUsuario();
+            }
+        } catch (erro) {
+            mostrarMensagem('erro', `Erro ao verificar status: ${erro.message}`);
+        } finally {
+            toggleCarregando(false);
+        }
+    }
+    
+    async function carregarDadosUsuario() {
+        try {
+            toggleCarregando(true);
+            
+            const resposta = await chamarAPI('obterDadosUsuario');
+            dadosUsuario = resposta;
+            
+            if (dadosUsuario) {
+                elementos.nomeUsuario.textContent = idUsuario;
+                await carregarChaves();
+            } else {
+                mostrarMensagem('erro', 'Usuário não encontrado no banco de dados.');
+            }
+        } catch (erro) {
+            mostrarMensagem('erro', `Erro ao carregar dados: ${erro.message}`);
+        } finally {
+            toggleCarregando(false);
+        }
+    }
+    
+    async function carregarChaves() {
+        try {
+            toggleCarregando(true);
+            elementos.listaChaves.innerHTML = '';
+            
+            if (dadosUsuario.chaves) {
+                const chaves = Object.entries(dadosUsuario.chaves);
+                
+                if (chaves.length === 0) {
+                    elementos.mensagemListaVazia.style.display = 'flex';
+                } else {
+                    elementos.mensagemListaVazia.style.display = 'none';
+                    
+                    chaves.forEach(([nomeChave, valorChave]) => {
+                        const chaveItem = document.createElement('div');
+                        chaveItem.className = 'chave-item';
+                        chaveItem.innerHTML = `
+                            <div>
+                                <strong>${nomeChave}:</strong>
+                                <span class="chave-texto">${valorChave}</span>
+                            </div>
+                            <div class="acoes-chave">
+                                <button class="botao-icone" title="Copiar chave" onclick="copiarChave('${valorChave}')">
+                                    <i class="mdi mdi-content-copy"></i>
+                                </button>
+                            </div>
+                        `;
+                        elementos.listaChaves.appendChild(chaveItem);
+                    });
+                }
+            } else {
+                elementos.mensagemListaVazia.style.display = 'flex';
+            }
+        } catch (erro) {
+            mostrarMensagem('erro', `Erro ao carregar chaves: ${erro.message}`);
+        } finally {
+            toggleCarregando(false);
+        }
+    }
+    
+    function generateComplexKey() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-';
+        const length = 32;
+        let result = '';
+        
+        result += chars[Math.floor(Math.random() * 26)];
+        result += chars[26 + Math.floor(Math.random() * 26)];
+        result += chars[52 + Math.floor(Math.random() * 10)];
+        result += chars[62 + Math.floor(Math.random() * (chars.length - 62))];
+        
+        for (let i = 4; i < length; i++) {
+            result += chars[Math.floor(Math.random() * chars.length)];
+        }
+        
+        return result.split('').sort(() => 0.5 - Math.random()).join('');
+    }
+    
+    async function gerarNovaChave() {
+        try {
+            toggleCarregando(true);
+            elementos.botaoGerarChaves.disabled = true;
+            
+            const numChaves = dadosUsuario.chaves ? Object.keys(dadosUsuario.chaves).length : 0;
+            const nomeChave = `chave${numChaves + 1}`;
+            const novaChave = generateComplexKey();
+            
+            const resposta = await chamarAPI('gerarChave', {
+                nomeChave: nomeChave,
+                valorChave: novaChave
+            });
+            
+            if (resposta.success) {
+                if (!dadosUsuario.chaves) dadosUsuario.chaves = {};
+                dadosUsuario.chaves[nomeChave] = novaChave;
+                
+                elementos.novasChavesGeradas.innerHTML = `
+                    <div class="chave-item">
+                        <div>
+                            <strong>${nomeChave}:</strong>
+                            <span class="chave-texto">${novaChave}</span>
+                        </div>
+                        <div class="acoes-chave">
+                            <button class="botao-icone" title="Copiar chave" onclick="copiarChave('${novaChave}')">
+                                <i class="mdi mdi-content-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                elementos.mensagemGeracao.innerHTML = `<i class="mdi mdi-check-circle"></i> Nova chave "${nomeChave}" gerada com sucesso!`;
+                elementos.mensagemGeracao.style.display = 'flex';
+                
+                await carregarChaves();
+            } else {
+                throw new Error('Falha ao gerar chave através da API');
+            }
+        } catch (erro) {
+            mostrarMensagem('erro', `Erro ao gerar chave: ${erro.message}`);
+        } finally {
+            toggleCarregando(false);
+            elementos.botaoGerarChaves.disabled = false;
+        }
+    }
+    
+    function copiarChave(texto) {
+        navigator.clipboard.writeText(texto).then(() => {
+            mostrarMensagem('sucesso', 'Chave copiada para a área de transferência!');
+        }).catch(err => {
+            mostrarMensagem('erro', 'Falha ao copiar chave: ' + err);
+        });
+    }
+    
+    function contatarSuporte() {
+        window.location.href = `https://www.instagram.com/programing_js?igsh=MTgzZHBsdmExNWJlbg==`;
+    }
+    
+    elementos.botaoAtualizarLista.addEventListener('click', carregarChaves);
+    elementos.botaoGerarChaves.addEventListener('click', gerarNovaChave);
+    elementos.botaoContatoSuporte.addEventListener('click', contatarSuporte);
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!idUsuario || !senhaUsuario) {
+            mostrarMensagem('erro', 'Dados de usuário não encontrados. Faça login novamente.');
+            elementos.conteudoNormal.style.display = 'none';
+        } else {
+            verificarStatusUsuario();
+        }
+    });
+    
+    window.copiarChave = copiarChave;
+</script>
+</body>
+</html>

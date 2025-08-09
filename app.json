@@ -1,0 +1,15 @@
+{
+    "name": "CM STORE",
+    "short_name": "CMSTORE",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#FFFF00",
+    "theme_color": "#FFFF00",
+    "icons": [
+        {
+            "src": "https://i.imgur.com/U8wLsJd.jpeg",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ]
+}
